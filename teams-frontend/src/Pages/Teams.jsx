@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
     fetchTeams,
@@ -11,13 +12,15 @@ import Navbar from "../Components/Navbar";
 import Sidebar from "../Components/SideBar";
 import TeamCard from "../Components/TeamCard";
 import TeamForm from "../Components/Teamform";
+
 function Teams() {
+
+    const navigate = useNavigate();
 
     const [teams, setTeams] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const [showForm, setShowForm] = useState(false);
-
     const [selectedTeam, setSelectedTeam] = useState(null);
 
     useEffect(() => {
@@ -26,111 +29,73 @@ function Teams() {
 
     const loadTeams = async () => {
         try {
-
             const response = await fetchTeams();
-
             setTeams(response.data);
-
         } catch (error) {
-
             console.error(error);
-
         } finally {
-
             setLoading(false);
-
         }
     };
 
     // Create Team
     const handleCreateTeam = async (team) => {
-
         try {
-
             await saveTeam(team);
-
             setShowForm(false);
-
             loadTeams();
-
         } catch (error) {
-
             console.error(error);
-
         }
-
     };
 
     // Update Team
     const handleUpdateTeam = async (team) => {
-
         try {
-
             await editTeam(selectedTeam.teamCode, team);
-
             setShowForm(false);
-
             setSelectedTeam(null);
-
             loadTeams();
-
         } catch (error) {
-
             console.error(error);
-
         }
-
     };
 
-    // Edit Button
+    // Edit Team
     const handleEdit = (team) => {
-
         setSelectedTeam(team);
-
         setShowForm(true);
-
     };
 
-    // Delete Button
+    // Delete Team
     const handleDelete = async (teamCode) => {
 
-        const confirmDelete = window.confirm(
-            "Are you sure you want to delete this team?"
-        );
-
-        if (!confirmDelete) return;
+        if (!window.confirm("Delete this team?")) return;
 
         try {
-
             await removeTeam(teamCode);
-
             loadTeams();
-
         } catch (error) {
-
             console.error(error);
-
         }
-
     };
 
-    // Create Button
+    // Create Team Button
     const handleCreateClick = () => {
-
         setSelectedTeam(null);
-
         setShowForm(true);
+    };
 
+    // Manage Members Button
+    const handleManageMembers = (team) => {
+        navigate(`/teams/${team.teamCode}/members`);
     };
 
     if (loading) {
-
         return <h2>Loading Teams...</h2>;
-
     }
 
     return (
-
         <div>
 
             <Sidebar />
@@ -140,8 +105,8 @@ function Teams() {
             <div
                 style={{
                     marginLeft: "250px",
-                    padding: "30px",
-                    marginTop: "20px"
+                    marginTop: "20px",
+                    padding: "30px"
                 }}
             >
 
@@ -150,11 +115,10 @@ function Teams() {
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
-                        marginBottom: "30px"
+                        marginBottom: "20px"
                     }}
                 >
-
-                    <h1>Teams</h1>
+                    <h2>Teams</h2>
 
                     <button
                         onClick={handleCreateClick}
@@ -169,32 +133,25 @@ function Teams() {
                     >
                         + Create Team
                     </button>
-
                 </div>
 
                 <hr />
 
                 {teams.length === 0 ? (
-
                     <h3>No Teams Found</h3>
-
                 ) : (
-
-                    teams.map(team => (
-
+                    teams.map((team) => (
                         <TeamCard
                             key={team.teamCode}
                             team={team}
                             onEdit={handleEdit}
                             onDelete={handleDelete}
+                            onManageMembers={handleManageMembers}
                         />
-
                     ))
-
                 )}
 
                 {showForm && (
-
                     <TeamForm
                         initialData={selectedTeam}
                         onSave={
@@ -207,15 +164,12 @@ function Teams() {
                             setSelectedTeam(null);
                         }}
                     />
-
                 )}
 
             </div>
 
         </div>
-
     );
-
 }
 
 export default Teams;

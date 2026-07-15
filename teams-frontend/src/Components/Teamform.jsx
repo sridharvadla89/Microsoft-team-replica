@@ -1,21 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function TeamForm({ onSave, onCancel }) {
+function TeamForm({ initialData, onSave, onCancel }) {
 
-    const [teamName, setTeamName] = useState("");
-    const [description, setDescription] = useState("");
+    const [team, setTeam] = useState({
+        teamName: "",
+        description: ""
+    });
+
+    useEffect(() => {
+
+        if (initialData) {
+
+            setTeam({
+                teamName: initialData.teamName,
+                description: initialData.description
+            });
+
+        }
+
+    }, [initialData]);
+
+    const handleChange = (e) => {
+
+        setTeam({
+            ...team,
+            [e.target.name]: e.target.value
+        });
+
+    };
 
     const handleSubmit = (e) => {
 
         e.preventDefault();
 
-        onSave({
-            teamName,
-            description
-        });
+        onSave(team);
 
-        setTeamName("");
-        setDescription("");
     };
 
     return (
@@ -36,63 +55,80 @@ function TeamForm({ onSave, onCancel }) {
 
             <div
                 style={{
-                    width: "450px",
-                    background: "white",
+                    background: "#fff",
+                    padding: "30px",
                     borderRadius: "10px",
-                    padding: "25px"
+                    width: "400px"
                 }}
             >
 
-                <h2>Create Team</h2>
+                <h2>
+                    {initialData ? "Edit Team" : "Create Team"}
+                </h2>
 
                 <form onSubmit={handleSubmit}>
 
-                    <input
-                        type="text"
-                        placeholder="Team Name"
-                        value={teamName}
-                        onChange={(e) => setTeamName(e.target.value)}
-                        required
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            marginBottom: "15px"
-                        }}
-                    />
+                    <div style={{ marginBottom: "15px" }}>
 
-                    <textarea
-                        placeholder="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        rows="4"
-                        style={{
-                            width: "100%",
-                            padding: "10px"
-                        }}
-                    />
+                        <label>Team Name</label>
 
-                    <div
-                        style={{
-                            marginTop: "20px",
-                            display: "flex",
-                            justifyContent: "space-between"
-                        }}
-                    >
-
-                        <button
-                            type="button"
-                            onClick={onCancel}
-                        >
-                            Cancel
-                        </button>
-
-                        <button type="submit">
-
-                            Create Team
-
-                        </button>
+                        <input
+                            type="text"
+                            name="teamName"
+                            value={team.teamName}
+                            onChange={handleChange}
+                            required
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                marginTop: "5px"
+                            }}
+                        />
 
                     </div>
+
+                    <div style={{ marginBottom: "15px" }}>
+
+                        <label>Description</label>
+
+                        <textarea
+                            name="description"
+                            value={team.description}
+                            onChange={handleChange}
+                            rows="4"
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                marginTop: "5px"
+                            }}
+                        />
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        style={{
+                            background: "#4B49AC",
+                            color: "white",
+                            border: "none",
+                            padding: "10px 20px",
+                            marginRight: "10px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        {initialData ? "Update Team" : "Create Team"}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        style={{
+                            padding: "10px 20px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Cancel
+                    </button>
 
                 </form>
 

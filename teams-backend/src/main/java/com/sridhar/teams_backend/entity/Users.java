@@ -100,4 +100,8 @@ public class Users implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public String getName() {
+        return firstName+" "+lastName;
+    }
 }

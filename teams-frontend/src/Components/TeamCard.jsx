@@ -1,4 +1,4 @@
-function TeamCard({ team, onEdit, onDelete }) {
+function TeamCard({ team, onEdit, onDelete,onManageMembers }) {
 
     return (
 
@@ -44,7 +44,20 @@ function TeamCard({ team, onEdit, onDelete }) {
                 >
                     Delete
                 </button>
-
+                <button
+    onClick={() => onManageMembers(team)}
+    style={{
+        padding: "8px 15px",
+        background: "#2563eb",
+        color: "white",
+        border: "none",
+        borderRadius: "5px",
+        cursor: "pointer",
+        marginLeft: "10px"
+    }}
+>
+    Manage Members
+</button>
             </div>
 
         </div>

@@ -10,13 +10,20 @@ public class LoginResponse {
     private String tokenType;
     private String email;
     private String role;
-    public LoginResponse(){
+    private Long id;
+    private String firstName;
+    private String lastName;
 
+    public LoginResponse() {
     }
-    public LoginResponse(String accessToken,String tokenType,String email,String role){
-        this.accessToken=accessToken;
-        this.tokenType=tokenType;
-        this.email=email;
-        this.role=role;
+
+    public LoginResponse(String accessToken, String tokenType, String email, String role, Long id, String firstName, String lastName) {
+        this.accessToken = accessToken;
+        this.tokenType = tokenType;
+        this.email = email;
+        this.role = role;
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 }

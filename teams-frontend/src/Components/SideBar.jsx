@@ -43,6 +43,24 @@ function Sidebar() {
 
                 <p>
                     <Link
+                        to="/chat"
+                        style={{ color: "white", textDecoration: "none" }}
+                    >
+                        Personal Chat
+                    </Link>
+                </p>
+
+                <p>
+                    <Link
+                        to="/group-chat"
+                        style={{ color: "white", textDecoration: "none" }}
+                    >
+                        Group Chat
+                    </Link>
+                </p>
+
+                <p>
+                    <Link
                         to="/channels"
                         style={{ color: "white", textDecoration: "none" }}
                     >

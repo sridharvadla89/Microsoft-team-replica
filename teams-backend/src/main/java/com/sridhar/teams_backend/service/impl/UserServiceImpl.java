@@ -99,7 +99,45 @@ public class UserServiceImpl implements UserService {
                 jwtService.generateTokens(user.getEmail()),
                 "Bearer",
                 user.getEmail(),
-                user.getRole().getName()
+                user.getRole().getName(),
+                user.getId(),
+                user.getFirstName(),
+                user.getLastName()
         );
+    }
+
+    @Override
+    public java.util.List<UserResponse> getAllUsers(Long currentUserId) {
+        return userRepo.findAll().stream()
+                .filter(u -> !u.getId().equals(currentUserId))
+                .map(u -> {
+                    UserResponse r = new UserResponse();
+                    r.setId(u.getId());
+                    r.setFirstName(u.getFirstName());
+                    r.setLastName(u.getLastName());
+                    r.setEmail(u.getEmail());
+                    r.setPhoneNumber(u.getPhoneNumber());
+                    r.setDepartment(u.getDepartment());
+                    r.setJobTitle(u.getJobTitle());
+                    r.setRole(u.getRole().getName());
+                    return r;
+                })
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public UserResponse getUserById(Long userId) {
+        Users u = userRepo.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        UserResponse r = new UserResponse();
+        r.setId(u.getId());
+        r.setFirstName(u.getFirstName());
+        r.setLastName(u.getLastName());
+        r.setEmail(u.getEmail());
+        r.setPhoneNumber(u.getPhoneNumber());
+        r.setDepartment(u.getDepartment());
+        r.setJobTitle(u.getJobTitle());
+        r.setRole(u.getRole().getName());
+        return r;
     }
 }
